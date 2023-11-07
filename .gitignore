@@ -1,0 +1,15 @@
+*.csv
+*.xlsx
+temp.py
+tmp.py
+temp/
+tmps/
+temps/
+_0.py
+*.pyc
+__pycache__/
+/__pycache__/
+.idea/
+/.idea/
+.DS_Store/
+/.DS_Store/
