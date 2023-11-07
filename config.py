@@ -1,7 +1,7 @@
 import yaml
 
 
-path = 'config.yaml'
+path = 'config.txt.yaml'
 with open(path, encoding='utf-8') as f:
     yaml_conf = yaml.safe_load(f)
     # print(type(yaml_conf), yaml_conf)
@@ -19,9 +19,11 @@ class Config(object):
         self.redis_host = yaml_conf['redis_host']
         self.redis_port = yaml_conf['redis_port']
         self.redis_db = yaml_conf['redis_db']
+        self.redis_password = yaml_conf['redis_password']
 
         self.redisearch_host = yaml_conf['redisearch_host']
         self.redisearch_port = yaml_conf['redisearch_port']
+        self.redisearch_password = yaml_conf['redisearch_password']
 
         self.sentry_dsn = yaml_conf['sentry_dsn']
 

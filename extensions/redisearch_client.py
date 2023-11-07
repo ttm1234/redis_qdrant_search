@@ -5,7 +5,12 @@ from redis.commands.search.field import TextField, NumericField, TagField
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
 
 
-redis_search = redis.Redis(host=config.redisearch_host, port=config.redisearch_port, db=0, decode_responses=True)
+redis_search = redis.Redis(
+    host=config.redisearch_host,
+    port=config.redisearch_port,
+    password=config.redisearch_password,
+    db=0, decode_responses=True,
+)
 
 # redis_search.get('foo')  # todo delete
 
