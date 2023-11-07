@@ -1,6 +1,5 @@
 import datetime
 import functools
-
 import redis
 
 from config import config
@@ -10,7 +9,7 @@ from util import uid_from_request
 
 
 class DailyRateLimiter(object):
-    key_expire_time = 3600 * 25
+    key_expire_time = 3600 * 48
 
     def __init__(self, redis_client, daily_limit):
         self.redis_client: redis.Redis = redis_client

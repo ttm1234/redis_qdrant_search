@@ -1,6 +1,6 @@
 from flask import request
 
-from logics.goods import goods_query
+from logics.goods import goods_query, goods_update
 from services.rate_limiter_srvs.rate_limiter import rate_limiter
 from util import result_handler, uid_from_request
 
@@ -13,3 +13,9 @@ def api_goods_query():
     r = goods_query(user_id, key)
     return result_handler(r)
 
+
+def api_goods_update():
+    user_id = uid_from_request()
+    data = request.json
+    r = goods_update(user_id, data)
+    return result_handler(r)

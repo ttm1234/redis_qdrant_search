@@ -37,18 +37,25 @@ paths:
             
             例子
             ```
-            {
-              "code": 200,
-              "data": [
-                {
-                  "sku_id": 4,
-                  "title": "apple banana package",
-                  "description": "this is a package, include apple and banana"
-                }
-              ],
-              "msg": "ok"
-            }
             ```
+
+  /update:
+    post:
+      operationId: routes.goods.api_goods_update
+      tags:
+        - 更新
+      summary: 更新
+      description: 更新商品, 参数 sku_id 在数据库有就更新，没有就创建
+      parameters:
+        - $ref: '#/parameters/user_jwt'
+        - name: post_goods_update_para
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/post_goods_update_data'
+      responses:
+        "200":
+          description: ok
 
 
 parameters:
@@ -59,3 +66,23 @@ parameters:
     type: string
     default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjQ4MjEzMzAyMTcsImN0IjoxNjk5MjY2MjE3fQ.mbTwkLMmORM1atKUkgMsIzpecdsgeTAb-B0-p5XGT6w
     description: 登录态 jwt token，在这个例子中，这里先写死。
+
+
+definitions:
+  post_goods_update_data:
+    type: object
+    properties:
+      sku_id:
+        type: integer
+        description: sku id, 数据库有就更新，没有就创建
+      title:
+        type: string
+        description: title
+      description:
+        type: string
+        description: description
+
+    required:
+      - sku_id
+      - title
+      - description

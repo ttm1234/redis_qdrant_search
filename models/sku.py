@@ -38,6 +38,12 @@ class Sku(Base, ModelMixin):
         return m
 
     @classmethod
+    def create(cls, _id, title, description):
+        m = cls.unsave_create(_id, title, description)
+        m.save()
+        return m
+
+    @classmethod
     def get_all_need_sync(cls):
         ms = cls.query.filter(cls.synced == False).all()
         return ms
@@ -46,3 +52,15 @@ class Sku(Base, ModelMixin):
     def get_one(cls, _id):
         r = cls.query.filter(cls.id == _id).first()
         return r
+
+    def update(self, title, description):
+        self.title = title
+        self.description = description
+        self.synced = False
+        self.save()
+        return self
+
+    def update_synced(self):
+        self.synced = True
+        self.save()
+        return self

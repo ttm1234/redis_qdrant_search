@@ -3,7 +3,7 @@ import json
 from extensions import index_search
 from redis.commands.search.query import Query
 import constant
-from services.cache_srvs import cache_to_redis
+from services.cache_srv import cache_to_redis
 
 
 def process_keywords(key):
