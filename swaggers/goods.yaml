@@ -1,0 +1,61 @@
+swagger: "2.0"
+
+info:
+  version: "1.0.0"
+  title: 商品API
+  description: 商品相关，只有个搜索商品的
+
+basePath: "/goods_search"
+
+paths:
+  /query:
+    get:
+      operationId: routes.goods.api_goods_query
+      tags:
+        - 搜索
+      summary: 搜索
+      description: 搜索商品
+      parameters:
+        - $ref: '#/parameters/user_jwt'
+        - name: key
+          in: query
+          description: "关键词"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: |
+            搜索商品 
+            code data msg 是固定格式  
+            在这个api中，data类型是list[dict]，dict中是业务需要的参数，详细解释如下
+            
+            | key      | 类型 | 含义        |
+            | ---- | ---- | ---- |
+            | sku_id     | int    | sku_id |
+            | title     | string    | title |
+            | description     | string    | description |
+            
+            例子
+            ```
+            {
+              "code": 200,
+              "data": [
+                {
+                  "sku_id": 4,
+                  "title": "apple banana package",
+                  "description": "this is a package, include apple and banana"
+                }
+              ],
+              "msg": "ok"
+            }
+            ```
+
+
+parameters:
+  user_jwt:
+    name: GoodsSearch-Token
+    in: header
+    required: true
+    type: string
+    default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjQ4MjEzMzAyMTcsImN0IjoxNjk5MjY2MjE3fQ.mbTwkLMmORM1atKUkgMsIzpecdsgeTAb-B0-p5XGT6w
+    description: 登录态 jwt token，在这个例子中，这里先写死。
