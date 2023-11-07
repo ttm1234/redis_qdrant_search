@@ -51,4 +51,4 @@ __pycache__/
 /.idea/
 .DS_Store/
 /.DS_Store/
-*.yaml
+*.txt.yaml
