@@ -1,3 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+*.env
+pip-log.txt
+pip-tmp/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Project specific
+*.log
+db.sqlite3
+media/
+static/
+
+# System specific
+.DS_Store
+Thumbs.db
+
+
 *.csv
 *.xlsx
 temp.py
@@ -13,3 +51,4 @@ __pycache__/
 /.idea/
 .DS_Store/
 /.DS_Store/
+*.yaml
