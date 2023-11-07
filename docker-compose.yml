@@ -1,0 +1,43 @@
+version: '3'
+services:
+  app_server:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./docs/DockerfileApp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - redisearch
+    environment:
+      - PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+      - PYTHONUNBUFFERED=1
+    command: sh server_start.sh
+
+  consumer_celery:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./docs/DockerfileCelery
+    depends_on:
+      - redis
+      - redisearch
+    environment:
+      - PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+      - PYTHONUNBUFFERED=1
+    command: python3.9 -m celery worker -A celery_task -l INFO --pool=gevent --concurrency=10
+
+  redis:
+    image: redis/redis-stack-server:6.2.4-v2
+#    ports:
+#      - "6666:6379" 我用来测试的
+    environment:
+      - REDIS_ARGS=--requirepass abcd123AA
+
+  redisearch:
+    image: redis/redis-stack-server:6.2.4-v2
+#    ports:
+#      - "6667:6379" 我用来测试的
+    environment:
+      - REDIS_ARGS=--requirepass abcd123AA

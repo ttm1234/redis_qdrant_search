@@ -57,3 +57,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+'''
+/usr/local/bin/gunicorn app:app -c gunicorn.conf.py
+'''
