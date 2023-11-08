@@ -1,10 +1,13 @@
 import typing as tp
 
 from exceptions import BaseError
+from models import SkuPrediction
 from models.sku import Sku
-from services import redisearch_srvs
 from services.permission_srv import PermissionEnum, check_permission
-from services.redisearch_srvs.search_sku import search_sku
+from services.qdrant_srvs.search_embedding import query_qdrant_info
+from services.qdrant_srvs.set_embedding import set_skus_qdrant
+from services.redisearch_srvs import set_skus_search
+from services.redisearch_srvs.search_sku import query_redisearch_info
 
 
 def sku_to_redisearch(sku_id: tp.Union[int, None]):
@@ -14,7 +17,8 @@ def sku_to_redisearch(sku_id: tp.Union[int, None]):
         sku = Sku.get_one(sku_id)
         skus = [sku, ]
 
-    redisearch_srvs.set_skus_search(skus)
+    set_skus_search(skus)
+    set_skus_qdrant(skus)
 
 
 def goods_query(user_id, key):
@@ -22,12 +26,12 @@ def goods_query(user_id, key):
         return list()
 
     # ---------------------------
-    r = search_sku(key, fuzzy=False)
+    r = query_redisearch_info(key, fuzzy=False)
     if not r:
-        r = search_sku(key, fuzzy=True)
+        r = query_redisearch_info(key, fuzzy=True)
 
-    # if not r:
-    #     r = func_todo(user_id, key) todo
+    if not r:
+        r = query_qdrant_info(key)
 
     return r
 
@@ -48,4 +52,29 @@ def goods_update(user_id, data):
     celery_task.celery_sync_sku.delay(sku.id)
 
     return sku.to_dict()
+
+
+def goods_recommend(user_id):
+    sku_prediction = SkuPrediction.one_by_uid(user_id)
+    if sku_prediction is None:
+        return list()
+
+    # ------------------------
+    sku_prediction_info = sku_prediction.sku_prediction_info
+
+    # todo 没有分页
+    partial_info = sku_prediction_info[: 10]
+
+    r = []
+    for i in partial_info:
+        sku_id = i[0]
+
+        sku = Sku.get_one(sku_id)
+        if sku is None:
+            print('sku is None')
+            # raise Exception('测试数据不严谨可能到这里，生产不会')
+            continue
+        r.append(sku.to_dict())
+
+    return r
 

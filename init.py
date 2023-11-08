@@ -1,5 +1,7 @@
-from extensions import Base, engine, db_session
-from models.sku import Sku
+from extensions import Base, engine, db_session, qdrant_cli
+from extensions import qdrant_client
+import qdrant_client.http.models as qmodels
+from models import Sku, SkuPrediction, SkuRating
 
 import csv
 
@@ -24,12 +26,23 @@ import csv
 
 
 def init_db_table():
-    from models.sku import Sku
-    # Base.metadata.create_all(bind=engine)
-    Base.metadata.tables[Sku.__tablename__].create(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    # for _Model in [Sku, SkuPrediction, SkuRating]:
+    #     Base.metadata.tables[_Model.__tablename__].create(bind=engine)
 
 
-def insert_data():
+def init_dqrant():
+    r = qdrant_cli.recreate_collection(
+        collection_name=qdrant_client.qdrant_collection_name,
+        vectors_config=qmodels.VectorParams(
+            size=qdrant_client.DIMENSION,
+            distance=qdrant_client.METRIC,
+        )
+    )
+    print('init_dqrant r', r)
+
+
+def insert_data_goods():
     """
     批量给数据库插入数据
     """
@@ -51,6 +64,40 @@ def insert_data():
     celery_task.celery_sync_sku.delay(None)
 
 
+def insert_data_rating():
+    """
+    批量给数据库插入数据
+    """
+    data = [
+        [1,	1, 5],
+        [1,	2, 3],
+        [2,	1, 4],
+        [2,	2, 2],
+        [2,	3, 1],
+        [3,	2, 4],
+        [3,	3, 5],
+        [4,	1, 2],
+        [4,	4, 3],
+    ]
+
+    for user_id, sku_id, rating in data:
+        m = SkuRating.find_one(user_id, sku_id)
+        if m is None:
+            m = SkuRating.create(user_id, sku_id, rating)
+        else:
+            m.update_rating(rating)
+
+    import celery_task
+    celery_task.celery_predict_rating.delay()
+
+    return None
+
+
+def insert_data():
+    insert_data_goods()
+    insert_data_rating()
+
+
 def db_drop_all():
     Base.metadata.drop_all(engine)
 
@@ -58,5 +105,6 @@ def db_drop_all():
 if __name__ == '__main__':
     # init_nltk()
     db_drop_all()
+    init_dqrant()
     init_db_table()
     insert_data()

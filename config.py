@@ -27,6 +27,11 @@ class Config(object):
 
         self.sentry_dsn = yaml_conf['sentry_dsn']
 
+        self.openai_api_key = yaml_conf['openai_api_key']
+        self.openai_api_base = yaml_conf['openai_api_base']
+
+        self.qdrant_host = yaml_conf['qdrant_host']
+
         # ====================================================
         # 业务参数
         self.daily_limit = yaml_conf['daily_limit']

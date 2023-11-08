@@ -9,6 +9,10 @@ from config import config
 from exceptions import InvalidAuthorization
 
 
+def unix_timestamp():
+    return int(time.time() * 1000)
+
+
 def result_handler(data, msg='not found', errcode=400):
     if data is None:
         r = {
@@ -51,12 +55,12 @@ def uid_from_jwt(jwt_str):
     try:
         _payload = jwt.decode(jwt_str, config.jwt_secret, algorithms=[constant.JWT_ALGORITHM])
     except jwt.PyJWTError:
-        print('token解析失败')
+        # print('token解析失败')
         raise InvalidAuthorization()
     else:
         exp = int(_payload.pop('exp'))
         if time.time() > exp:
-            print('已失效')
+            # print('已失效')
             raise InvalidAuthorization()
         else:
             return _payload['user_id']

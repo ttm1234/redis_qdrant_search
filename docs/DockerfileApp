@@ -1,15 +1,29 @@
-FROM python:3.9-alpine
+FROM homebrew/ubuntu20.04
 
-ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+# 切换到 root 用户
+USER root
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories
-RUN apk add --no-cache python3-dev libffi-dev gcc musl-dev make
+# 更新apt源为阿里云源
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+RUN apt-get clean
+RUN apt-get update
 
-WORKDIR /app
+# 更新apt并安装必要的软件包
+RUN apt-get install -y \
+    python3.9 \
+    python3.9-dev \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir ~/.pip && echo "[global]\nindex-url = https://mirrors.aliyun.com/pypi/simple/" > ~/.pip/pip.conf
+
+# 安装科学计算库,这两个经常出错所以先安装这两个
+RUN python3.9 -m pip install --no-cache-dir pandas scikit-learn
+
+# 将 requirements.txt 复制到工作目录
 COPY requirements.txt .
-RUN pip3.9 install --no-cache-dir -r requirements.txt
+RUN python3.9 -m pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["/usr/local/bin/gunicorn", "app:app", "-c", "gunicorn.conf.py"]
+CMD ["python3.9", "-m", "/usr/local/bin/gunicorn", "app:app", "-c", "gunicorn.conf.py"]

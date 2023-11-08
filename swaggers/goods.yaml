@@ -13,7 +13,7 @@ paths:
       operationId: routes.goods.api_goods_query
       tags:
         - 搜索
-      summary: 搜索
+      summary: 搜索 - todo没有分页
       description: 搜索商品
       parameters:
         - $ref: '#/parameters/user_jwt'
@@ -37,7 +37,31 @@ paths:
             
             例子
             ```
+            {
+              "code": 200,
+              "data": [
+                {
+                  "sku_id": 5,
+                  "title": "new apple",
+                  "description": "this is a new apple"
+                }
+              ],
+              "msg": "ok"
+            }
             ```
+
+  /recommend:
+    get:
+      operationId: routes.goods.api_goods_recommend
+      tags:
+        - 推荐
+      summary: 推荐 - todo没有分页
+      description: 推荐商品，需要前端根据实际情况，异步请求或者搜索不到的时候请求
+      parameters:
+        - $ref: '#/parameters/user_jwt'
+      responses:
+        "200":
+          description: 和 /query 的搜索接口返回一模一样
 
   /update:
     post:
@@ -45,7 +69,7 @@ paths:
       tags:
         - 更新
       summary: 更新
-      description: 更新商品, 参数 sku_id 在数据库有就更新，没有就创建
+      description: 更新商品, 参数 sku_id 在数据库有就更新，没有就创建。这个api不是题目要求的，做这个是展示异步更新的逻辑
       parameters:
         - $ref: '#/parameters/user_jwt'
         - name: post_goods_update_para

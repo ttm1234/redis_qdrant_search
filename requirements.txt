@@ -1,3 +1,4 @@
+grpcio==1.41.0
 billiard==3.6.4.0
 blinker==1.7.0
 celery==4.4.7
@@ -27,3 +28,7 @@ swagger-ui-bundle==0.0.9
 Werkzeug==2.3.7
 gevent==22.10.1
 gunicorn==21.2.0
+openai==0.28.1
+qdrant-client
+pandas==2.1.2
+scikit-surprise==1.1.3

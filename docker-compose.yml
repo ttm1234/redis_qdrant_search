@@ -10,6 +10,7 @@ services:
     depends_on:
       - redis
       - redisearch
+      - qdrant
     environment:
       - PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
       - PYTHONUNBUFFERED=1
@@ -23,6 +24,7 @@ services:
     depends_on:
       - redis
       - redisearch
+      - qdrant
     environment:
       - PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
       - PYTHONUNBUFFERED=1
@@ -38,6 +40,10 @@ services:
   redisearch:
     image: redis/redis-stack-server:6.2.4-v2
 #    ports:
-#      - "6667:6379" 我用来测试的
+#      - "6667:6379"
     environment:
       - REDIS_ARGS=--requirepass abcd123AA
+
+  qdrant:
+    # qdrant 版本待定
+    image: qdrant/qdrant
