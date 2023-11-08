@@ -1,26 +1,6 @@
-#FROM python:3.9-alpine
-#
-#ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-#
-## 更换镜像源
-#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories
-#
-#RUN pip3.9 install --upgrade cython
-#
-#RUN apk add --no-cache icu-data-full python3-dev libffi-dev gcc musl-dev make musl-dev libffi-dev py3-scipy py3-numpy-dev py3-numpy py3-pandas postgresql-dev cargo g++ zlib-dev jpeg-dev openblas-dev linux-headers
-#
-#WORKDIR /app
-#
-#COPY requirements.txt .
-#RUN pip3.9 install --upgrade pip
-#RUN pip3.9 install --no-cache-dir -r requirements.txt
-#
-#COPY . .
-#
-#CMD ["python3.9", "-m", "celery", "worker", "-A", "celery_task", "-l", "INFO", "--pool=gevent", "--concurrency=10"]
+FROM ubuntu:20.04
 
-# 使用Ubuntu 20.04作为基础镜像
-FROM homebrew/ubuntu20.04
+ENV DEBIAN_FRONTEND=noninteractive
 
 # 切换到 root 用户
 USER root

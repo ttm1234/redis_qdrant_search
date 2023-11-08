@@ -38,7 +38,7 @@ Thumbs.db
 
 *.csv
 *.xlsx
-temp.py
+_废弃/temp.py
 tmp.py
 temp/
 tmps/

@@ -1,4 +1,31 @@
-FROM homebrew/ubuntu20.04
+#FROM python:3.9-alpine
+#
+#ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+#
+## 更换镜像源
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories
+#
+## 安装依赖
+#RUN apk add --no-cache python3-dev libffi-dev gcc musl-dev make libressl-dev musl-dev libffi-dev
+#
+## 安装依赖包
+#RUN apk add --no-cache py3-numpy py3-pandas postgresql-dev cargo g++ zlib-dev jpeg-dev
+#
+#
+#WORKDIR /app
+#
+#RUN pip3.9 pandas==2.1.2
+#
+#COPY requirements.txt .
+#RUN pip3.9 install --no-cache-dir -r requirements.txt
+#
+#COPY . .
+#
+#CMD ["/usr/local/bin/gunicorn", "app:app", "-c", "gunicorn.conf.py"]
+
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # 切换到 root 用户
 USER root
